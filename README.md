@@ -66,12 +66,3 @@ The application uses the following main entities:
 - **Security**: Spring Security (simplified for learning)
 - **Build Tool**: Maven
 
-## Notes for Students
-
-This project is designed to be a learning resource for college students. It intentionally:
-
-1. Uses a simplified authentication system with guest bookings
-2. Implements a clear, easy-to-understand code structure
-3. Includes detailed comments throughout the code
-4. Provides flexible database options (H2 in-memory for quick testing, MySQL for production-like environments)
-5. Uses basic Spring Security configuration for easier understanding
