@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Reports - Busease</title>
+    <style>
+        /* Same CSS as routes.html */
+        :root {
+            --primary-color: #3a86ff;
+            --secondary-color: #8338ec;
+            --accent-color: #ff006e;
+            --success-color: #38b000;
+            --warning-color: #f48c06;
+            --danger-color: #e5383b;
+            --light-color: #f8f9fa;
+            --dark-color: #212529;
+            --gray-color: #6c757d;
+            --border-radius: 8px;
+            --box-shadow: 0 4px 20px rgba(0,0,0,0.1);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: var(--dark-color);
+            background-color: #f0f2f5;
+            display: flex;
+            min-height: 100vh;
+        }
+        
+        /* Sidebar styles */
+        .sidebar {
+            width: 250px;
+            background-color: var(--dark-color);
+            color: white;
+            padding: 1.5rem 0;
+            height: 100vh;
+            position: fixed;
+            top: 0;
+            left: 0;
+            overflow-y: auto;
+        }
+        
+        .sidebar-header {
+            padding: 0 1.5rem 1.5rem;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+        }
+        
+        .sidebar-header h2 {
+            color: white;
+            font-size: 1.5rem;
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-header p {
+            color: rgba(255,255,255,0.7);
+            font-size: 0.9rem;
+        }
+        
+        .sidebar-menu {
+            list-style: none;
+            margin-top: 1.5rem;
+        }
+        
+        .sidebar-menu li {
+            margin-bottom: 0.5rem;
+        }
+        
+        .sidebar-menu a {
+            display: block;
+            padding: 0.75rem 1.5rem;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            transition: var(--transition);
+            border-left: 3px solid transparent;
+        }
+        
+        .sidebar-menu a:hover, .sidebar-menu a.active {
+            background-color: rgba(255,255,255,0.1);
+            color: white;
+            border-left-color: var(--primary-color);
+        }
+        
+        .sidebar-menu a i {
+            margin-right: 0.5rem;
+            width: 20px;
+            text-align: center;
+        }
+        
+        /* Main content styles */
+        .main-content {
+            flex: 1;
+            margin-left: 250px;
+            padding: 2rem;
+        }
+        
+        .page-header {
+            margin-bottom: 2rem;
+            padding-bottom: 1rem;
+            border-bottom: 1px solid #e0e0e0;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .page-header h1 {
+            font-size: 1.8rem;
+            color: var(--dark-color);
+        }
+        
+        /* Card styles */
+        .stats-container {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 1.5rem;
+            margin-bottom: 2rem;
+        }
+        
+        .stat-card {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .stat-card .stat-value {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: var(--primary-color);
+            margin-bottom: 0.5rem;
+        }
+        
+        .stat-card .stat-label {
+            font-size: 1rem;
+            color: var(--gray-color);
+            text-transform: uppercase;
+            letter-spacing: 1px;
+        }
+        
+        /* Chart styles */
+        .chart-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+        }
+        
+        .chart-container h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        /* Table styles */
+        .table-container {
+            background-color: white;
+            border-radius: var(--border-radius);
+            padding: 1.5rem;
+            box-shadow: var(--box-shadow);
+            margin-bottom: 2rem;
+            overflow-x: auto;
+        }
+        
+        .table-container h2 {
+            margin-bottom: 1rem;
+            font-size: 1.5rem;
+            color: var(--dark-color);
+        }
+        
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+        
+        th, td {
+            padding: 1rem;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+        
+        th {
+            background-color: var(--light-color);
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+        
+        tr:hover {
+            background-color: #f9f9f9;
+        }
+    </style>
+</head>
+<body>
+    <!-- Sidebar -->
+    <div class="sidebar">
+        <div class="sidebar-header">
+            <h2>Busease</h2>
+            <p>Admin Dashboard</p>
+        </div>
+        
+        <ul class="sidebar-menu">
+            <li>
+                <a href="/admin">
+                    🏠 Dashboard
+                </a>
+            </li>
+            <li>
+                <a href="/admin/buses">
+                    🚌 Manage Buses
+                </a>
+            </li>
+            <li>
+                <a href="/admin/routes">
+                    🛣️ Manage Routes
+                </a>
+            </li>
+            <li>
+                <a href="/admin/bookings">
+                    📝 View Bookings
+                </a>
+            </li>
+            <li>
+                <a href="/admin/users">
+                    👥 Manage Users
+                </a>
+            </li>
+            <li>
+                <a href="/admin/reports" class="active">
+                    📊 Reports
+                </a>
+            </li>
+        </ul>
+        
+        <a href="/logout" class="logout-btn">Logout</a>
+    </div>
+    
+    <!-- Main Content -->
+    <div class="main-content">
+        <div class="page-header">
+            <h1>Reports</h1>
+        </div>
+        
+        <!-- Statistics Cards -->
+        <div class="stats-container">
+            <div class="stat-card">
+                <div class="stat-value" th:text="${totalBookings}">256</div>
+                <div class="stat-label">Total Bookings</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value">₹<span th:text="${totalRevenue}">15,000</span></div>
+                <div class="stat-label">Total Revenue</div>
+            </div>
+            
+            <div class="stat-card">
+                <div class="stat-value" th:text="${#lists.size(popularRoutes)}">10</div>
+                <div class="stat-label">Active Routes</div>
+            </div>
+        </div>
+        
+        <!-- Popular Routes Table -->
+        <div class="table-container">
+            <h2>Popular Routes</h2>
+            <table>
+                <thead>
+                    <tr>
+                        <th>Route</th>
+                        <th>Origin</th>
+                        <th>Destination</th>
+                        <th>Fare (₹)</th>
+                        <th>Available Seats</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    <tr th:each="route : ${popularRoutes}">
+                        <td th:text="${route.routeCode}">MUM-PUN-001</td>
+                        <td th:text="${route.origin}">Mumbai</td>
+                        <td th:text="${route.destination}">Pune</td>
+                        <td th:text="${route.fare}">500</td>
+                        <td th:text="${route.availableSeats}">35</td>
+                    </tr>
+                    <!-- If no routes found -->
+                    <tr th:if="${#lists.isEmpty(popularRoutes)}">
+                        <td colspan="5" style="text-align: center;">No routes found.</td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        
+        <!-- Note about more reports -->
+        <div style="text-align: center; padding: 2rem; color: var(--gray-color);">
+            <p>More detailed reports and analytics will be available in future updates.</p>
+        </div>
+    </div>
+</body>
+</html>
